@@ -134,7 +134,7 @@ npm init -y
 3. Install required packages: In your project directory we will now install the stas and bsv libraries:
 ```
 npm install bsv@1.5.6
-npm install 
+npm install stas-sdk
 ```
 &nbsp;
 
@@ -146,15 +146,26 @@ ni index.js
 
 5. Import required libraries: In your index.js file, import the required libraries using the require function. Here's an example:
 ```
-const stas = require('');
 const bsv = require('bsv');
+const stas = require('stas-sdk');
+
+// or to get single functions directly 
+const {stasTransfer} = require('stas-sdk/index');
 ```
 &nbsp;
+
+The imported stas library will contain all functions ready to be utilized by your application.
 
 
 ## Getting Started
 
-To conduct testing, simply navigate to the tests folder. Within this folder, you will find non-broadcasting examples, as well as various tools that can be utilized to test the mainnet and mint your initial tokens in a matter of minutes. All of these resources can be found within the /tests directory.
+To conduct testing, simply navigate to the tests folder. 
+
+```
+cd node_modules/stas-sdk/tests
+```
+
+Within this folder, you will find non-broadcasting examples, as well as various tools that can be utilized to test the mainnet and mint your initial tokens in a matter of minutes. All of these resources can be found within the /tests directory.
 
 &nbsp;
 
@@ -308,7 +319,8 @@ You need to use the contract output #0 UTXO in the issuance function. The utilit
 
 
 ```
-const {utility} = require(stas)
+const stas = require('stas-sdk')
+const {utility} = stas
 
 const contractUtxo = utility.getUtxoFromTx(contractHex, 0)
 ```
