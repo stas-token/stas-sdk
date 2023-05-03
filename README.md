@@ -1,5 +1,7 @@
 # STAS-SDK Library
 
+![Property 1=Variant2 (2)](https://user-images.githubusercontent.com/120104994/235901528-41e4d6cd-5977-4706-89e2-7f68f11ffb52.jpg)
+
 ## Overview
 STAS Tokens are UTXO based smart contracts that have a variety of templates that can be used to create transactions for all types of specific use cases. STAS tokens are considered layer zero tokens as they are bound to the native satoshi value of the BSV blockchain.
 This library offers an effortless and user-friendly experience for interaction with UTXO blockchain that utilizes STAS tokens. STAS tokens are a growing list of UTXO-based smart contracts that can be employed for various transactions. The library is designed to provide functional neutrality for interaction with any STAS token type. Some examples include NFTs, Fungible tokens, Appendable tokens and more.
