@@ -1,3 +1,5 @@
+const bsv = require('bsv');
+
 /**
  * Use this file to log random private key and its address for use in testing
  */
