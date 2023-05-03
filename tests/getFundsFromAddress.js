@@ -1,4 +1,4 @@
-const testTools = require('./testUtility')
+const testTools = require('./testUtility');
 
 /**
  * This funciton will return any funds that are remaining in the testing private keys to a destination address of your choice.
@@ -7,7 +7,8 @@ const testTools = require('./testUtility')
  * To run this function put in the terminal : node getFundsFromAddress.js
  */
 const sendFundsFromAddress = async (address) => {
-    await testTools.getAddressUtxos()
-    await testTools.sendRemainingFundsToAddress(address)
-}
-sendFundsFromAddress("ADD IN ADDRESS STRING HERE WHERE YOU WANT THE REMAINING BSV FUNDS TO GO")
+  await testTools.getAddressUtxos();
+  await testTools.sendRemainingFundsToAddress(address);
+};
+
+sendFundsFromAddress('ADD IN ADDRESS STRING HERE WHERE YOU WANT THE REMAINING BSV FUNDS TO GO');
