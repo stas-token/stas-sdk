@@ -31,8 +31,14 @@ class DummyData {
       this.undefined = undefined;
   
       this.dataStringArray = ['this is data1', 'this is data2', 'this is data3'];
+
+      this.dataStringArrayWithOpCodes = ['this is data1', 'this is data2', 'this is data3', "OP_RETURN", "OP_FALSE"];
+
       this.dataHexAsm = '74686973206973206461746131 74686973206973206461746132 74686973206973206461746133';
       this.dataHexString = '0d746869732069732064617461310d746869732069732064617461320d74686973206973206461746133';
+
+      this.dataHexAsmWithOpCodes = '74686973206973206461746131 74686973206973206461746132 74686973206973206461746133 6a 00'
+      this.dataHexStringWithOpCodes = '0d746869732069732064617461310d746869732069732064617461320d74686973206973206461746133016a0100'
       this.stas20MetaDataArray = [`| VST | 0ace4b949d5427bd2dfb43a1a596fe11778311542d1aa640d5a2add3cc741445 | https://upload.wikimedia.org/wikipedia/en/9/95/Test_image.jpg | 3 | 1 | Stas 20 token | 0 |`];
   
       this.stasMetaDataArray = ['| VSN | 92831d3fa94981b22ea24d5eb818267fb2fbff51711dfceaf9aab7f71845c260 | https://upload.wikimedia.org/wikipedia/en/9/95/Test_image.jpg | 1 | 1 | Stas token |'];
