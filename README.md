@@ -333,7 +333,7 @@ Tokens can be issued as single or multiple outputs, in the case of splittable to
 
 #### IssueData
 Issue data will contain 3 elements : 
-1. addr - this is the address string that will receive the tokens on issunace
+1. addr - this is the address string that will receive the tokens on issuance
 2. satoshsis - the amount of tokens in satoshis the address owner will receive
 3. data - an array of strings that will be converted to hexadecimal format and added to the script as meta data.
 
