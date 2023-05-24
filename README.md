@@ -229,8 +229,6 @@ Simply, while in the /test directory you can run this command in the terminal
 ```
 node instantMint.js
 ```
-&nbsp;
-
 The process will start and the token will be minted onchain with all Txids provided. 
 
 ```
@@ -334,6 +332,34 @@ The issuance function is responsible for generating the transaction that issues 
 Tokens can be issued as single or multiple outputs, in the case of splittable tokens. However, for non-splittable tokens, each token will be issued as a separate output since they cannot be divided or combined with other scripts of the same data value.
 
 #### IssueData
+Issue data will contain 3 elements : 
+1. addr - this is the address string that will receive the tokens on issuance
+2. satoshsis - the amount of tokens in satoshis the address owner will receive
+3. data - an array of strings that will be converted to hexadecimal format and added to the script as meta data.
+
+&nbsp;
+
+#### OP CODES
+Within the data array, we allocate specific string values for OP CODES to serve a special purpose. These string values correspond to the hexadecimal representation of the respective OP CODES, enabling the inclusion of Bitcoin script within the token metadata. For easy reference, you can find the hexadecimal representations of all OP CODES in the constants.js file.
+
+Example
+```
+const data = ["OP_RETURN", "OP_FALSE", "OP_IF"]
+//converts to asm in hex OP CODE representation
+const asm = `6a 00 63`
+```
+
+&nbsp;
+
+If wanting to add OP CODES as literal strings to the meta data you can do the following
+```
+const data = ["OP_RETURN OP_FALSE OP_IF"]
+//converts to asm as per normal plain text to hex value
+const asm = `4f505f52455455524e204f505f46414c5345204f505f4946`
+```
+
+&nbsp;
+
 
 Here is an example of the issue data array.
 
@@ -697,6 +723,9 @@ In this section we will go over some of the advanced transaction building featur
 
 ### Data 
 Certain token templates allow for data to be incorporated into transactions in varying ways. In order to maintain a universal format, the data format will always employ an array format. Each element within the array will be regarded as a single script chunk, and all data will be provided as plain text strings. Let us explore some examples of how we can leverage this feature in some of the token templates.
+
+## OP CODES
+As per the same as the issuance function, OP CODE strings are reserved to allow for Bitcoin script to be added into the token meta data. Please refer to the issuance section for more details.
 
 &nbsp;
 
