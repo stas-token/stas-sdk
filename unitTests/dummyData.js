@@ -10,7 +10,7 @@ class DummyData {
   
       this.privateKeyString = 'KxuLBg6YMTizTypfxz2E8MdSEo1UQzu2cnqT9iUYVYTchXHZMehK';
       this.privateKey = bsv.PrivateKey.fromString(this.privateKeyString);
-      this.publicKey = bsv.PublicKey.fromPrivateKey(this.privateKey);
+      this.publicKey = this.privateKey.publicKey.toString('hex')
       this.publicKeyString = this.publicKey.toString('hex');
       this.address = bsv.Address.fromPrivateKey(this.privateKey);
       this.addressString = this.address.toString();
