@@ -108,7 +108,7 @@ A comprehensive table has been prepared to display all the characteristics and a
 
 ## SDK Reference
 The library is comprised of primary function files that are responsible for transaction creation. Each of these files contains three primary functions: sign, unsigned, and feeEstimate.
-- signed - The sign function generates and returns a hexadecimal string that represents the signed transaction.
+- signed - The sign function generates and returns the signed transaction.
 - unSigned -  the unsigned function returns an object that contains two fields. The "tx" field contains the transaction itself, while the "unsignedData" field includes an array of data for each unsigned input in the transaction. This data contains all of the necessary arguments required to sign the transaction, including the public key string that can be used to retrieve the corresponding private key. More on this in Advanced Features section.
 - feeEstimate - the feeEstimate function calculates the transaction cost in satoshis, taking into account the fee rates defined in the utility.js variables SATS and PERBYTE. The result of this calculation is then returned as a numerical value.
 
@@ -303,7 +303,7 @@ The token satoshis refer to the total amount of satoshis utilized in the token s
 
 
 ```
-const contractHex =  await stasContract.signed(
+const contractTx =  await stasContract.signed(
     issuerPrivateKey,
     contractUtxo,
     paymentUtxo,
@@ -313,16 +313,15 @@ const contractHex =  await stasContract.signed(
 )
 ```
 
-After executing the function, you will receive a transaction hexadecimal representation that is now ready to be broadcasted to the miner.
+After executing the function, you will receive a transaction object representation. To convert to hexadecimal simply add "toString()", and is now ready to be broadcasted to the miner.
 
-You need to use the contract output #0 UTXO in the issuance function. The utility.js file includes a helper function that retrieves a UTXO object from a transaction hex. This function takes the transaction hex and output index value as arguments.
-
+You need to use the contract output #0 UTXO in the issuance function. The utility.js file includes a helper function that retrieves a UTXO object from a transaction hex. This function takes the transaction and output index value as arguments.
 
 ```
 const stas = require('stas-sdk')
 const {utility} = stas
 
-const contractUtxo = utility.getUtxoFromTx(contractHex, 0)
+const contractUtxo = utility.getUtxoFromTx(contractTx, 0)
 ```
 
 ### Issuance
@@ -436,7 +435,7 @@ protocol : represents the token template used to issue the token and must be a s
 
 
 ```
-const issuanceHex = await stasIssuace.signed(
+const issuanceTx = await stasIssuace.signed(
     issuerPrivateKey, 
     issueData, 
     contractUtxo, 
@@ -447,7 +446,7 @@ const issuanceHex = await stasIssuace.signed(
     protocol
 )
 ```
-After executing the function, you will receive a transaction hexadecimal representation that is now ready to be broadcasted to the miner.
+After executing the function, you will receive a transaction object representation. To convert to hexadecimal simply add "toString()", and is now ready to be broadcasted to the miner.
 
 
 
@@ -475,18 +474,18 @@ To utilize the transfer function, it is necessary to first prepare some UTXOs. S
 Both UTXOs will require private keys to be supplied, although it is possible to use the same private keys for both, if applicable. Finally, you will need to input the destination address string to complete the process.
 
 ```
-const transferHex = await stasTransfer.signed(
+const transferTx = await stasTransfer.signed(
     ownerPrivatekey, 
     stasUtxo, 
     destinationAddress, 
     paymentUtxo, 
     paymentPrivateKey)
 ```
-After executing the function, you will receive a transaction hexadecimal representation that is now ready to be broadcasted to the miner.
+After executing the function, you will receive a transaction object representation. To convert to hexadecimal simply add "toString()", and is now ready to be broadcasted to the miner.
 
 &nbsp;
 ### Split
-Similar to the transfer function, this particular function generates a hexadecimal representation of a transaction that can distribute tokens to multiple addresses at once. It should be noted that this function is only applicable to tokens that have the splittable property set to true. For more details on which token templates possess this attribute, please refer to the STAS features table.
+Similar to the transfer function, this particular function generates transaction that can distribute tokens to multiple addresses at once. It should be noted that this function is only applicable to tokens that have the splittable property set to true. For more details on which token templates possess this attribute, please refer to the STAS features table.
 
 To create a split transaction, we need a STAS UTXO, a fee UTXO, and the private keys linked with these UTXOs. Instead of the destination address required in the transfer function, we need an array that contains all the destination addresses and their corresponding amounts.
 
@@ -510,14 +509,14 @@ const splitDestinations = [
 It should be noted that if the token owner needs to receive change from the STAS UTXO input, it must be included in the splitDestination array. The total amount in the outputs of the array should match the input satoshis amount.
 
 ```
-const splitHex = await stasSplit.signed(
+const splitTx = await stasSplit.signed(
     ownerPrivatekey, 
     stasUtxo, 
     splitDestinations, 
     paymentUtxo, 
     paymentPrivateKey)
 ```
-After executing the function, you will receive a transaction hexadecimal representation that is now ready to be broadcasted to the miner.
+After executing the function, you will receive a transaction object representation. To convert to hexadecimal simply add "toString()", and is now ready to be broadcasted to the miner.
 
 &nbsp;
 
@@ -547,7 +546,7 @@ The previous transaction hex is required as part of the unlocking script to comp
 To create a merge transaction, the following additional parameters are necessary: private keys for both UTXO inputs, a destination address, and the payment UTXO and its corresponding private key.
 
 ```
-const mergeHex = await stasMerge.signed(
+const mergeTx = await stasMerge.signed(
     ownerPrivateKey1,
     stasInput1,
     ownerPrivateKey2,
@@ -557,7 +556,7 @@ const mergeHex = await stasMerge.signed(
     paymentUtxo)
 
 ```
-After executing the function, you will receive a transaction hexadecimal representation that is now ready to be broadcasted to the miner.
+After executing the function, you will receive a transaction object representation. To convert to hexadecimal simply add "toString()", and is now ready to be broadcasted to the miner.
 
 NOTE: It is important to keep in mind that the size of the merge transaction will increase after each subsequent merge transaction due to its design nature. To optimize the transaction size, it is recommended to consider ways to mitigate the compounding effects of the data size. One possible solution is to use interval transfer functions for each UTXO being merged, which resets the previous transaction hexadecimal to the size of a transfer transaction. It is recommended to transfer the UTXO after every two merge transactions as a means of resetting the transaction size before continuing with additional merge transactions.
 
@@ -571,14 +570,14 @@ Token redemption refers to the process of converting the STAS token satoshis bac
 This function will take the typical arguments as follows:
 
 ```
-const redeemHex = await stasRedeem.signed(
+const redeemTx = await stasRedeem.signed(
     ownerPrivateKey,
     stasUtxo,
     paymentUtxo,
     paymentPrivateKey)
 
 ```
-After executing the function, you will receive a transaction hexadecimal representation that is now ready to be broadcasted to the miner.
+After executing the function, you will receive a transaction object representation. To convert to hexadecimal simply add "toString()", and is now ready to be broadcasted to the miner.
 
 The RedeemSplit function is designed to operate similarly to the redeem function, with an added parameter called "splitDestinations". This parameter specifies where the additional outputs of the transaction will be directed, much like the split function. It's worth noting that the total amount designated for split destinations will determine the number of satoshis redeemed from the STAS UTXO input. For example, if the STAS UTXO input contains 10 satoshis and the total output amount in the split destination array is 8, only 2 satoshis will be redeemed. The remaining satoshis will remain locked in STAS tokens and be sent to the new destination address(es).
 
@@ -634,7 +633,7 @@ paymentUtxo: This represents the UTXO that is being used to pay the transaction 
 &nbsp;
 
 ```
-const swapHex = stasAcceptSwap.signed(
+const swapTx = stasAcceptSwap.signed(
     offerTxHex, 
     ownerPrivateKey, 
     makerInputTxHex, 
@@ -649,7 +648,7 @@ const swapHex = stasAcceptSwap.signed(
 &nbsp;
 
 more on additionalOutputs soon...
-After executing the function, you will receive a transaction hexadecimal representation that is now ready to be broadcasted to the miner. The final outcome of the transaction will be that input #0 will transfer ownership to output #1, while input #1 will transfer ownership to output #0, in accordance with the terms of the atomic swap transaction.
+After executing the function, you will receive a transaction object representation. To convert to hexadecimal simply add "toString()", and is now ready to be broadcasted to the miner. The final outcome of the transaction will be that input #0 will transfer ownership to output #1, while input #1 will transfer ownership to output #0, in accordance with the terms of the atomic swap transaction.
 
 &nbsp;
 
@@ -660,7 +659,7 @@ To make this a three step swap we can simply create the offer hex with the unsig
 &nbsp;
 
 ```
-const unsignedOfferHex = await stasCreateSwap.unSigned(
+const unsignedOfferTx = await stasCreateSwap.unSigned(
     ownerPublicKey, 
     utxo, 
     wantedData
@@ -673,14 +672,13 @@ When the unsigned function call is made, the returned object will contain the tr
 An additional argument must be included, which is the complete transaction hexadecimal representation of the taker, which corresponds to input #1 in the unsigned swap hexadecimal.
 
 ```
-const signedSwapHex = await stasSignSwap.signed(
+const signedSwapTx = await stasSignSwap.signed(
     unSignedSwapHex, 
     ownerPrivateKey, 
     takerInputTx
 )
 ```
-After executing the function, you will receive a transaction hexadecimal representation that is now ready to be broadcasted to the miner.
-
+After executing the function, you will receive a transaction object representation. To convert to hexadecimal simply add "toString()", and is now ready to be broadcasted to the miner.
 &nbsp;
 
 ### Additional outputs for atomic swaps
@@ -738,7 +736,7 @@ const data = [
     "Some other plain text string"
 ]
 
-const transferHex = await stasTransfer.signed(
+const transferTx = await stasTransfer.signed(
     ownerPrivatekey, 
     stasUtxo, 
     destinationAddress, 
@@ -760,7 +758,7 @@ const data = [
     "Some other plain text string"
 ]
 
-const transferHex = await stasTransfer.signed(
+const transferTx = await stasTransfer.signed(
     ownerPrivatekey, 
     stasUtxo, 
     destinationAddress, 
@@ -799,7 +797,7 @@ Zero change transaction building is an excellent resource for developers who wis
 To use the zero change model in the functions it requires an arguement boolean set to true. Here is an example in the stasTransfer function 
 
 ```
-const transferHex = await stasTransfer.signed(
+const transferTx = await stasTransfer.signed(
     ownerPrivatekey, 
     stasUtxo, 
     destinationAddress, 
@@ -822,8 +820,8 @@ In this instance, if the change amount surpasses 10 satoshis, an error will be t
 &nbsp;
 
 ### ZeroFee (currently not supported by existing miners)
-Zero fee will create the transaction hex without any payment input UTXO or change output UTXO. This model is currently not supported by any existing miners. 
-
+Zero fee will create the transaction without any payment input UTXO or change output UTXO. This model is currently not supported by any existing miners. 
+hex
 &nbsp;
 
 ### unSigned 
@@ -843,7 +841,7 @@ unsignedData = [{
             sighash  : number - sighash flags for the input,
             publicKeyString : string - public key string of the input
             stas :  boolean - indicating whether the input is stas type or not
-})
+}]
 
 ```
 The unsigned data can be used in conjunction with the BSV library to construct a valid signature for the input(s). 
