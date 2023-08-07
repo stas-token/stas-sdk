@@ -1,6 +1,6 @@
 {
   "name": "stas-sdk",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "STAS Token Library",
   "main": "index.js",
   "scripts": {
