@@ -36,19 +36,19 @@ const instantMint = async () => {
   
     // Create contract TX
     const contractHex = await stasContract.signed(testTools.issuerPrivateKey, testTools.issuerUtxo, testTools.contractFeeUtxo, testTools.privateKey, tokenSchemaTemplate, 10);
-    const contractTxResponse = await testTools.broadcast(contractHex);
+    const contractTxResponse = await testTools.broadcast(contractHex.toString());
     console.log('Contract Txid: ', contractTxResponse.data);
     const contractUtxo = utility.getUtxoFromTx(contractHex, 0);
   
     // Create issue TX
     const issueHex = await stasIssuance.signed(testTools.issuerPrivateKey, issueData, contractUtxo, testTools.issueFeeUtxo, testTools.privateKey, true, tokenSchemaTemplate.symbol, 'STAS-20');
-    const issueTxResponse = await testTools.broadcast(issueHex);
+    const issueTxResponse = await testTools.broadcast(issueHex.toString());
     console.log('Issue Txid: ', issueTxResponse.data);
     const tokenUtxoFromIssuance = utility.getUtxoFromTx(issueHex, 0);
   
     // Create redeem TX
     const redeemHex = await stasRedeem.signed(testTools.issuerPrivateKey, tokenUtxoFromIssuance, testTools.redeemFeeUtxo, testTools.privateKey );
-    const redeemTxResponse = await testTools.broadcast(redeemHex);
+    const redeemTxResponse = await testTools.broadcast(redeemHex.toString());
     console.log('Redeem Txid: ', redeemTxResponse.data);
   
     console.log('Instant Mint Example Completed');

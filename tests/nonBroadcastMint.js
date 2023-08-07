@@ -28,10 +28,10 @@ const issueData = [{
 
 const mintNonBroadcast = async () => {
   const contractHex = await stasContract.signed(issuerPrivateKey, utxoTemplateForContract, utxoTemplateForFees, paymentPrivateKey, tokenSchemaTemplate, 10);
-  console.log('Contract Transaction Hex: ', contractHex);
+  console.log('Contract Transaction Hex: ', contractHex.toString());
   const contractUtxo = utility.getUtxoFromTx(contractHex, 0);
   const issueHex = await stasIssuance.signed(issuerPrivateKey, issueData, contractUtxo, utxoTemplateForFees, paymentPrivateKey, true, tokenSchemaTemplate.symbol, 'STAS-20');
-  console.log('Issue Transaction Hex: ', issueHex);
+  console.log('Issue Transaction Hex: ', issueHex.toString());
 };
 
 mintNonBroadcast();
