@@ -116,9 +116,17 @@ describe('utility.js file Testing', function() {
 
   describe('convertToReverseEndian string input', function() {
     const res = utility.convertToReverseEndian(dummyData.txid);
-    it('should return hex value value ', function() {
+    it('should return hex value ', function() {
       expect(res).to.be.a('string');
       expect(res).to.equal('3412907856341290785634129078563412907856341290785634129078563412');
+    });
+  });
+
+  describe('convertToReverseEndian string input', function() {
+    const res = utility.convertToReverseEndian(dummyData.txid2);
+    it('should return hex value with leading "00" txid', function() {
+      expect(res).to.be.a('string');
+      expect(res).to.equal('3412907856341290785634129078563412907856341290785634129078563400');
     });
   });
 
