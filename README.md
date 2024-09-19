@@ -715,6 +715,131 @@ In this case the input #1 needs to contain exactly 3000 in native satoshis to co
 
 &nbsp;
 
+## Bulk Merge
+The BulkMerge class provides a streamlined method to consolidate multiple STAS token UTXOs into a single UTXO. This is particularly useful when you have a large number of STAS tokens spread across different UTXOs and wish to merge them for easier management.
+
+&nbsp;
+
+### Introduction
+The process of bulk merging involves transferring and merging UTXOs through a series of transactions. The BulkMerge class automates this process, handling fee estimations, transaction creation, and sequence management. This guide will walk you through using the BulkMerge class to perform a bulk merge of your STAS tokens.
+
+&nbsp;
+
+### Steps to Perform a Bulk Merge
+The bulk merge process involves the following steps:
+
+- Prepare STAS UTXOs to Merge
+- Prepare the Fee UTXO
+- Initialize the BulkMerge Instance
+- Execute the Merge Process
+- Handle the Response
+
+&nbsp;
+
+### 1. Prepare STAS UTXOs to Merge
+Create an array of UTXO objects representing the STAS tokens you wish to merge. Each UTXO should include the following fields:
+
+- txid: Transaction ID of the UTXO.
+- vout: Output index of the UTXO.
+- satoshis: Amount in satoshis.
+- script: The locking script of the UTXO.
+- privateKey: The private key associated with the UTXO.
+
+```
+const stasUtxos = [
+  {
+    txid: 'abcd1234...',    // Replace with actual txid
+    vout: 0,
+    satoshis: 1000,
+    script: '76a914...',    // Replace with actual script
+    privateKey: 'L1aW4aubDFB7yfras2S1mN3bqg9L...', // Replace with actual private key
+  },
+  // Add more UTXOs as needed
+];
+```
+&nbsp;
+
+### 2. Prepare the Fee UTXO
+Prepare a UTXO to cover transaction fees. This UTXO should be a standard BSV UTXO (not a STAS token) and include:
+
+txid: Transaction ID.
+vout: Output index.
+satoshis: Amount in satoshis (ensure it's sufficient to cover all fees).
+script: The locking script.
+Also, have the private key associated with this fee UTXO.
+
+Example:
+```
+const feeUtxo = {
+  txid: 'efgh5678...',     // Replace with actual txid
+  vout: 1,
+  satoshis: 5000,
+  script: '76a914...',     // Replace with actual script
+};
+
+const feePrivateKey = 'Kx3nPz8G5P5xZsP8d7mE6J...'; // Replace with actual private key
+```
+&nbsp;
+
+### 3. Initialize the BulkMerge Instance
+Create an instance of the BulkMerge class by passing in the STAS UTXOs, the fee UTXO, and the fee private key.
+
+```
+const BulkMerge = require('./BulkMerge');
+const bulkMerge = new BulkMerge(stasUtxos, feeUtxo, feePrivateKey);
+```
+&nbsp;
+
+### 4. Execute the Merge Process
+Call the init() method to start the bulk merge process. Since it's asynchronous, use await inside an async function.
+
+```
+(async () => {
+  try {
+    const response = await bulkMerge.init();
+    // Handle the response
+  } catch (error) {
+    console.error('Bulk merge failed:', error);
+  }
+})();
+```
+&nbsp;
+
+### 5. Handle the Response
+After the merge process completes, the init() method returns an object containing:
+
+- changeUtxo: The change UTXO from the fee transaction (if any).
+- transactions: An array of all transactions created during the merge.
+- finalStasUtxo: The final merged STAS UTXO.
+The ownership of the final STAS UTXO will be assigned to the owner of the first Stas token provided in the utxos contructor array.
+You can use this information to broadcast the transactions and manage your UTXOs.
+
+Example:
+```
+console.log('Final STAS UTXO:', response.finalStasUtxo);
+console.log('Change UTXO:', response.changeUtxo);
+console.log('Transactions:', response.transactions);
+
+// TODO: Broadcast transactions to the network
+// Ensure to broadcast them in the correct order
+```
+&nbsp;
+
+### Additional Information
+- Zero-Fee Mode: If you wish to perform the bulk merge without transaction fees (e.g., in a test environment), you can set the isZeroFee parameter to true when initializing the BulkMerge instance.
+```
+const bulkMerge = new BulkMerge(stasUtxos, null, null, true);
+```
+- Transaction Order: When broadcasting the transactions, ensure they are sent in the order they appear in the transactions array to maintain the correct sequence and dependencies.
+
+&nbsp;
+
+### Broadcasting
+- The response.transactions array will contain all the signed transactions as objects. All transactions can be broadcasted using a bulk transaction API where available. 
+- UTXO integrity is an important step to properly allow transactions to be broadcasted without errors. If any of the UTXOs are already spent previously or if an incorrect private key is used as the unlocking key, it will break the transaction chain.
+
+&nbsp;
+
 ## Advanced features
 
 In this section we will go over some of the advanced transaction building features that are available in the library. 

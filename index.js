@@ -16,5 +16,6 @@ stasLib.stasTemplates = require('./lib/stasTemplates');
 stasLib.utility = require('./lib/utility');
 stasLib.stasFeeEstimates = require('./lib/stasFeeEstimates');
 stasLib.tokenSchemaTemplate = require('./lib/tokenSchemaTemplate');
+stasLib.bulkMerge = require('./lib/bulkMerge');
 
 module.exports = stasLib;

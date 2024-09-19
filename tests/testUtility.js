@@ -1,5 +1,6 @@
 const bsv = require('bsv');
 const axios = require('axios');
+const utility = require('../lib/utility')
 
 /**
  * TestTools class will provide functions to utilize private key that contain funds to build UTXOs required to mint a STAS token. We will use Whats On Chain API services to retrieve UTXOs and broadcast transactions.
@@ -70,7 +71,7 @@ class TestTools {
   
     async prepareUtxosForMint(tokenSatoshis) {
       const tx = bsv.Transaction();
-      tx.feePerKb(50);// current fee rate accepted by Whats On Chain
+      tx.feePerKb(utility.SATS);// current fee rate accepted by Whats On Chain
   
       tx.from(this.utxos);
       // UTXO for tokens
@@ -106,7 +107,7 @@ class TestTools {
   
     async sendRemainingFundsToAddress(address) {
       const tx = bsv.Transaction();
-      tx.feePerKb(50);// current fee rate accepted by Whats On Chain
+      tx.feePerKb(utility.SATS);// current fee rate accepted by Whats On Chain
   
       tx.from(this.utxos);
       tx.to(address, 11);// send minimal output plus all change to the address arguemnt
